@@ -1,0 +1,32 @@
+import numpy as np
+import matplotlib.pyplot as plt
+import cv2
+def onChange(pos):
+    global src , src1, src2 ,src3
+    thres1=cv2.getTrackbarPos('Thres1','thres1')
+    thres2=cv2.getTrackbarPos('Thres2','thres2')
+    ret1,src1=cv2.threshold(src,thres1,255,cv2.THRESH_BINARY)
+    ret2,src2=cv2.threshold(src,thres2,255,cv2.THRESH_BINARY)
+    cv2.imshow('thres1',src1)
+    cv2.imshow('thres2',src2)
+    plt.figure(num=1)
+    plt.clf()
+    plt.bar(binX,hist)
+    plt.axvline(x=ret1, color='r', linestyle='--', linewidth=3)
+    plt.axvline(x=ret2, color='b', linestyle=':', linewidth=10)
+    plt.show()
+src=cv2.imread('./data/baboon.jpg',0)
+src1=src.copy()
+src2=src.copy()
+src3=src.copy()
+hist=cv2.calcHist(images=[src3],channels=[0],mask=None,histSize=[256],ranges=[0,256])
+hist=hist.reshape(-1)
+binX=np.arange(256)
+cv2.imshow('thres1',src1)
+cv2.imshow('thres2',src2)
+cv2.createTrackbar('Thres1','thres1',0,255,onChange)
+cv2.createTrackbar('Thres2','thres2',0,255,onChange)
+cv2.setTrackbarPos('Thres1','thres1',125)
+cv2.setTrackbarPos('Thres2','thres2',0)
+cv2.waitKey()
+cv2.destroyAllWindows()
